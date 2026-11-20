@@ -1,19 +1,22 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+// import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+// import { TanStackDevtools } from '@tanstack/react-devtools'
+
+import { NotFoundPage } from '@/pages/404'
 
 import '../styles.css'
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: NotFoundPage,
 })
 
 function RootComponent() {
   return (
     <>
       <Outlet />
-      <TanStackDevtools
+      {/* <TanStackDevtools
         config={{
           position: 'bottom-right',
         }}
@@ -23,7 +26,7 @@ function RootComponent() {
             render: <TanStackRouterDevtoolsPanel />,
           },
         ]}
-      />
+      /> */}
     </>
   )
 }
