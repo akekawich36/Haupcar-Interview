@@ -1,11 +1,18 @@
 import express from "express";
+import { sequelize } from "./db/sequelize.js";
+import "./models/index.js";
+
 const app = express();
-const port = 8000;
+const port = Number(process.env.PORT ?? 8000);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!sss");
-});
+try {
+  await sequelize.authenticate();
+  await sequelize.sync();
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+} catch (error) {
+  console.error("Failed to start server:", error);
+  process.exit(1);
+}
