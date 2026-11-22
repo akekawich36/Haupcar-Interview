@@ -1,7 +1,8 @@
-export const CarsPage = () => {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold">Cars</h1>
-    </div>
-  )
-}
+import { EmptyState, PageHeader } from '@/components'
+
+export const CarsPage = () => (
+  <>
+    <PageHeader title="Cars" description="Manage cars in the fleet" />
+    <EmptyState title="No cars yet" />
+  </>
+)

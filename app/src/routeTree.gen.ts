@@ -10,13 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as CarsIndexRouteImport } from './routes/cars/index'
-import { Route as CarsCarIdRouteImport } from './routes/cars/$carId'
+import { Route as AuthBrandsIndexRouteImport } from './routes/_auth/brands/index'
+import { Route as AuthCarsIndexRouteImport } from './routes/_auth/cars/index'
+import { Route as AuthCarsCarIdRouteImport } from './routes/_auth/cars/$carId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -24,49 +30,64 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CarsIndexRoute = CarsIndexRouteImport.update({
+const AuthBrandsIndexRoute = AuthBrandsIndexRouteImport.update({
+  id: '/brands/',
+  path: '/brands/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthCarsIndexRoute = AuthCarsIndexRouteImport.update({
   id: '/cars/',
   path: '/cars/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const CarsCarIdRoute = CarsCarIdRouteImport.update({
+const AuthCarsCarIdRoute = AuthCarsCarIdRouteImport.update({
   id: '/cars/$carId',
   path: '/cars/$carId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/cars/$carId': typeof CarsCarIdRoute
-  '/cars/': typeof CarsIndexRoute
+  '/cars/$carId': typeof AuthCarsCarIdRoute
+  '/brands/': typeof AuthBrandsIndexRoute
+  '/cars/': typeof AuthCarsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/cars/$carId': typeof CarsCarIdRoute
-  '/cars': typeof CarsIndexRoute
+  '/cars/$carId': typeof AuthCarsCarIdRoute
+  '/brands': typeof AuthBrandsIndexRoute
+  '/cars': typeof AuthCarsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/cars/$carId': typeof CarsCarIdRoute
-  '/cars/': typeof CarsIndexRoute
+  '/_auth/cars/$carId': typeof AuthCarsCarIdRoute
+  '/_auth/brands/': typeof AuthBrandsIndexRoute
+  '/_auth/cars/': typeof AuthCarsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/cars/$carId' | '/cars/'
+  fullPaths: '/' | '/login' | '/cars/$carId' | '/brands/' | '/cars/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/cars/$carId' | '/cars'
-  id: '__root__' | '/' | '/login' | '/cars/$carId' | '/cars/'
+  to: '/' | '/login' | '/cars/$carId' | '/brands' | '/cars'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/login'
+    | '/_auth/cars/$carId'
+    | '/_auth/brands/'
+    | '/_auth/cars/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  CarsCarIdRoute: typeof CarsCarIdRoute
-  CarsIndexRoute: typeof CarsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -85,28 +113,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cars/': {
-      id: '/cars/'
+    '/_auth/brands/': {
+      id: '/_auth/brands/'
+      path: '/brands'
+      fullPath: '/brands/'
+      preLoaderRoute: typeof AuthBrandsIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/cars/': {
+      id: '/_auth/cars/'
       path: '/cars'
       fullPath: '/cars/'
-      preLoaderRoute: typeof CarsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthCarsIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/cars/$carId': {
-      id: '/cars/$carId'
+    '/_auth/cars/$carId': {
+      id: '/_auth/cars/$carId'
       path: '/cars/$carId'
       fullPath: '/cars/$carId'
-      preLoaderRoute: typeof CarsCarIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthCarsCarIdRouteImport
+      parentRoute: typeof AuthRoute
     }
   }
 }
 
+interface AuthRouteChildren {
+  AuthCarsCarIdRoute: typeof AuthCarsCarIdRoute
+  AuthBrandsIndexRoute: typeof AuthBrandsIndexRoute
+  AuthCarsIndexRoute: typeof AuthCarsIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCarsCarIdRoute: AuthCarsCarIdRoute,
+  AuthBrandsIndexRoute: AuthBrandsIndexRoute,
+  AuthCarsIndexRoute: AuthCarsIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  CarsCarIdRoute: CarsCarIdRoute,
-  CarsIndexRoute: CarsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

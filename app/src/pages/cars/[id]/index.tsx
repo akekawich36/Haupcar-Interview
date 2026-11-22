@@ -1,11 +1,10 @@
-import React from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { PageHeader } from '@/components'
 
 const CarDetail = () => {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold">Car Detail Page</h1>
-    </div>
-  )
+  const navigate = useNavigate()
+
+  return <PageHeader title="Car Detail" onBack={() => void navigate({ to: '/cars' })} />
 }
 
 export default CarDetail
