@@ -1,0 +1,21 @@
+meta {
+  name: Update Brand
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/brands/:brandId
+  body: json
+  auth: none
+}
+
+params:path {
+  brandId: {{brandId}}
+}
+
+body:json {
+  {
+    "name": "Suzuki"
+  }
+}

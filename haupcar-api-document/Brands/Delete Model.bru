@@ -1,0 +1,16 @@
+meta {
+  name: Delete Model
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseUrl}}/api/brands/:brandId/models/:modelId
+  body: none
+  auth: none
+}
+
+params:path {
+  brandId: {{brandId}}
+  modelId: {{modelId}}
+}

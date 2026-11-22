@@ -1,0 +1,17 @@
+meta {
+  name: Create Brand
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/brands
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Suzuki"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create Model
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/brands/:brandId/models
+  body: json
+  auth: none
+}
+
+params:path {
+  brandId: {{brandId}}
+}
+
+body:json {
+  {
+    "name": "Swift"
+  }
+}

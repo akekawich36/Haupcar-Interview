@@ -1,0 +1,22 @@
+meta {
+  name: Update Model
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/brands/:brandId/models/:modelId
+  body: json
+  auth: none
+}
+
+params:path {
+  brandId: {{brandId}}
+  modelId: {{modelId}}
+}
+
+body:json {
+  {
+    "name": "Swift"
+  }
+}

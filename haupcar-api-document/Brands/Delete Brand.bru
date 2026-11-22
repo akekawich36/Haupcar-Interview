@@ -1,0 +1,15 @@
+meta {
+  name: Delete Brand
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/api/brands/:brandId
+  body: none
+  auth: none
+}
+
+params:path {
+  brandId: {{brandId}}
+}
