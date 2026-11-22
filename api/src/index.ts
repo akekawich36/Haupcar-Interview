@@ -1,9 +1,13 @@
 import express from "express";
 import { sequelize } from "./db/sequelize.js";
 import "./models/index.js";
+import router from "./routes/index.js";
 
 const app = express();
 const port = Number(process.env.PORT ?? 8000);
+
+app.use(express.json());
+app.use("/api", router);
 
 try {
   await sequelize.authenticate();

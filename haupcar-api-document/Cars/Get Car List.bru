@@ -1,0 +1,19 @@
+meta {
+  name: Get Car List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/cars?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+  ~brandId: 
+  ~modelId: 
+  ~status: available
+}

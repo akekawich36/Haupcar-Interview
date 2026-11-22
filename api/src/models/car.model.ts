@@ -11,7 +11,7 @@ import { sequelize } from "../db/sequelize.js";
 import { Brand } from "./brand.model.js";
 import { CarModel } from "./carModel.model.js";
 
-const CAR_STATUSES = ["available", "rented", "reserved"] as const;
+export const CAR_STATUSES = ["available", "rented", "reserved"] as const;
 type CarStatus = (typeof CAR_STATUSES)[number];
 
 export class Car extends Model<
