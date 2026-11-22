@@ -8,3 +8,12 @@ export const carListSchema = z.object({
   modelId: z.string().uuid().optional(),
   status: z.enum(CAR_STATUSES).optional(),
 });
+
+export const createCarSchema = z.object({
+  brandId: z.string().uuid(),
+  modelId: z.string().uuid(),
+  color: z.string().trim().min(1).max(50),
+  licensePlate: z.string().trim().min(1).max(20),
+  province: z.string().trim().min(1).max(100),
+  note: z.string().trim().nullish(),
+});

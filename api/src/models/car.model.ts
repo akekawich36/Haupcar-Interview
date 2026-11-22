@@ -23,6 +23,7 @@ export class Car extends Model<
   declare modelId: string;
   declare color: string;
   declare licensePlate: string;
+  declare province: string;
   declare status: CreationOptional<CarStatus>;
   declare note: CreationOptional<string | null>;
   declare isDeleted: CreationOptional<boolean>;
@@ -59,6 +60,10 @@ Car.init(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
+    province: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
     note: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -90,5 +95,13 @@ Car.init(
     sequelize,
     tableName: "cars",
     timestamps: true,
+    indexes: [
+      {
+        name: "cars_license_plate_province_unique",
+        unique: true,
+        fields: ["license_plate", "province"],
+        where: { is_deleted: false },
+      },
+    ],
   },
 );

@@ -1,0 +1,21 @@
+meta {
+  name: Create Car
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/cars
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "brandId": "{{brandId}}",
+    "modelId": "{{modelId}}",
+    "color": "White",
+    "licensePlate": "1กข 1234",
+    "province": "เชียงใหม่"
+  }
+}
