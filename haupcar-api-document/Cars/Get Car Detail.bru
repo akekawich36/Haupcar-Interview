@@ -1,0 +1,15 @@
+meta {
+  name: Get Car Detail
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/cars/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: {{carId}}
+}

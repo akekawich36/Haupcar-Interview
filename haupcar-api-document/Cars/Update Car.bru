@@ -1,0 +1,27 @@
+meta {
+  name: Update Car
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/cars/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: {{carId}}
+}
+
+body:json {
+  {
+    "brandId": "{{brandId}}",
+    "modelId": "{{modelId}}",
+    "color": "Black",
+    "licensePlate": "1กข 1234",
+    "province": "เชียงใหม่",
+    "status": "available",
+    "note": null
+  }
+}

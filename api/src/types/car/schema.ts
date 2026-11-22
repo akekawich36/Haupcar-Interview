@@ -17,3 +17,11 @@ export const createCarSchema = z.object({
   province: z.string().trim().min(1).max(100),
   note: z.string().trim().nullish(),
 });
+
+export const updateCarSchema = createCarSchema.extend({
+  status: z.enum(CAR_STATUSES),
+});
+
+export const carParamsSchema = z.object({
+  id: z.string().uuid(),
+});
