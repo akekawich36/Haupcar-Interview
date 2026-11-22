@@ -81,6 +81,10 @@ export const carList = async (query: CarListQuery) => {
       ...(modelId && { modelId }),
       ...(status && { status }),
     },
+    order: [
+      ["updatedAt", "DESC"],
+      ["id", "ASC"],
+    ],
     offset: (page - 1) * limit,
     limit,
     include: CAR_INCLUDES,
@@ -136,6 +140,15 @@ export const carCreate = async (
     }
     throw error;
   }
+};
+
+export const carDelete = async (id: string): Promise<boolean> => {
+  const [affected] = await Car.update(
+    { isDeleted: true, deletedAt: new Date() },
+    { where: { id, isDeleted: false } },
+  );
+
+  return affected > 0;
 };
 
 export const carUpdate = async (

@@ -1,7 +1,12 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { CircleAlert, Loader2 } from 'lucide-react'
-import { useGetCarsQuery } from '@/api'
-import { EmptyState, PageHeader, TablePagination } from '@/components'
+import { useState } from 'react'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { CircleAlert, Loader2, Plus } from 'lucide-react'
+import { toast } from 'sonner'
+import { useDeleteCarMutation, useGetCarsQuery } from '@/api'
+import type { Car } from '@/api'
+import { ConfirmModal, EmptyState, PageHeader, TablePagination } from '@/components'
+import { Button } from '@/components/ui/button'
+import type { ApiError } from '@/types/api'
 import { CarFilters } from './car-filters'
 import { CarTable } from './car-table'
 import { PAGE_SIZE } from './constants'
@@ -11,6 +16,8 @@ export const CarsPage = () => {
   const search = useSearch({ from: '/_auth/cars/' })
   const navigate = useNavigate({ from: '/cars/' })
   const page = search.page ?? 1
+  const [carToDelete, setCarToDelete] = useState<Car | null>(null)
+  const [deleteCar, { isLoading: isDeleting }] = useDeleteCarMutation()
 
   const { data, error, isLoading, isFetching } = useGetCarsQuery({
     page,
@@ -27,6 +34,19 @@ export const CarsPage = () => {
     void navigate({
       search: (prev) => ({ ...prev, page: nextPage > 1 ? nextPage : undefined }),
     })
+
+  const handleDelete = async () => {
+    if (!carToDelete) return
+
+    try {
+      await deleteCar(carToDelete.id).unwrap()
+      toast.success(`Car ${carToDelete.licensePlate} deleted`)
+      setCarToDelete(null)
+      if (data?.items.length === 1 && page > 1) handlePageChange(page - 1)
+    } catch (deleteError) {
+      toast.error((deleteError as ApiError).message)
+    }
+  }
 
   const renderContent = () => {
     if (isLoading) {
@@ -52,6 +72,7 @@ export const CarsPage = () => {
         <CarTable
           cars={data.items}
           onEdit={(car) => void navigate({ to: '/cars/$carId', params: { carId: car.id } })}
+          onDelete={setCarToDelete}
         />
       </div>
     )
@@ -59,12 +80,39 @@ export const CarsPage = () => {
 
   return (
     <>
-      <PageHeader title="Cars" description="Manage cars in the fleet" />
+      <PageHeader
+        title="Cars"
+        description="Manage cars in the fleet"
+        actions={
+          <Button asChild>
+            <Link to="/cars/create">
+              <Plus />
+              Add car
+            </Link>
+          </Button>
+        }
+      />
       <CarFilters search={search} onChange={handleFiltersChange} />
       <div className="rounded-lg border">{renderContent()}</div>
       {data && data.items.length > 0 ? (
         <TablePagination pagination={data.pagination} onPageChange={handlePageChange} />
       ) : null}
+      <ConfirmModal
+        open={carToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) setCarToDelete(null)
+        }}
+        title="Delete car?"
+        description={
+          carToDelete
+            ? `${carToDelete.licensePlate} · ${carToDelete.province} will be removed from the fleet.`
+            : undefined
+        }
+        confirmLabel="Delete"
+        destructive
+        loading={isDeleting}
+        onConfirm={() => void handleDelete()}
+      />
     </>
   )
 }

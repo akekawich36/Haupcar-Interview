@@ -3,6 +3,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 // import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 // import { TanStackDevtools } from '@tanstack/react-devtools'
 
+import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { NotFoundPage } from '@/pages/404'
 
@@ -17,6 +18,7 @@ function RootComponent() {
   return (
     <TooltipProvider>
       <Outlet />
+      <Toaster position="top-right" richColors />
       {/* <TanStackDevtools
         config={{
           position: 'bottom-right',

@@ -15,6 +15,7 @@ import {
   carDetail,
   carCreate,
   carUpdate,
+  carDelete,
 } from "../services/car.service.js";
 
 const CAR_ERRORS: Record<
@@ -119,5 +120,26 @@ export const updateCar = async (req: Request, res: Response) => {
     res.json(result.car);
   } catch (error) {
     res.status(500).json({ error: "Failed to update car" });
+  }
+};
+
+export const deleteCar = async (req: Request, res: Response) => {
+  try {
+    const { isValid, data, errors } = validate(carParamsSchema, req.params);
+    if (!isValid) {
+      return res
+        .status(400)
+        .json({ error: "Invalid path parameters", details: errors });
+    }
+
+    const deleted = await carDelete(data.id);
+    if (!deleted) {
+      const { status, error } = CAR_ERRORS.NOT_FOUND;
+      return res.status(status).json({ error });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete car" });
   }
 };

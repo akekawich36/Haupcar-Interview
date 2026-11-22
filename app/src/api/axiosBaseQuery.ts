@@ -30,7 +30,7 @@ export const axiosBaseQuery =
         params: cleanParams(params),
         signal: api.signal,
       })
-      return { data: response.data }
+      return { data: response.status === 204 ? null : response.data }
     } catch (error) {
       return { error: error as ApiError }
     }
