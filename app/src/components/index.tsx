@@ -1,2 +1,5 @@
+export { ActionColumn } from './common/ActionColumn'
+export type { RowAction } from './common/ActionColumn'
 export { EmptyState } from './common/EmptyState'
 export { PageHeader } from './common/PageHeader'
+export { TablePagination } from './common/TablePagination'

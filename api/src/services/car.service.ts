@@ -28,8 +28,10 @@ export const carList = async (query: CarListQuery) => {
       "note",
     ],
     where: {
+      isDeleted: false,
       ...(brandId && { brandId }),
       ...(modelId && { modelId }),
+      ...(status && { status }),
     },
     offset: (page - 1) * limit,
     limit,
